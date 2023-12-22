@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card.tsx";
-import { ArrowDownNarrowWide } from "lucide-react";
+import { ArrowDownNarrowWide, Check, X } from "lucide-react";
 
 const Serie = (props: SerieType) => {
   const complet = true;
@@ -25,7 +25,7 @@ const Serie = (props: SerieType) => {
         <CardHeader>
           <CardTitle className="font-bold text-2xl">{props.titre}</CardTitle>
           <CardDescription className="text-xs">
-            ({props.nbsaison} saisons)
+            ({props.saison.length} saisons)
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -42,9 +42,16 @@ const Serie = (props: SerieType) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Button size={"icon"}>E1</Button>
-              </DropdownMenuItem>
+              {props.saison.map((saison) =>
+                saison.episodes.map((episode, index) => (
+                  <DropdownMenuItem key={index}>
+                    S{saison.numero}|{episode.numero}
+                    <Button variant={"link"}>
+                      {episode.vu ? <Check size={16} /> : <X />}
+                    </Button>
+                  </DropdownMenuItem>
+                ))
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
           <Badge variant={"outline"}>{complet ? "Complet" : "Incomplet"}</Badge>
