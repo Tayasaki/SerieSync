@@ -13,8 +13,24 @@ export type SerieType = {
     }[];
   }[];
 };
-//[{"titre": "test", "synopsis": "test", "saison": [{"numero": 1, "episodes": [{"numero": 1, "vu": false}, {"numero": 2, "vu": false}]}]}]
-
+/*
+[
+  {
+    titre: "test",
+    synopsis: "test",
+    saison: [
+      {
+        numero: 1,
+        episodes: [
+          { numero: 1, vu: false },
+          { numero: 2, vu: false },
+        ],
+      },
+      { numero: 2, episodes: [{ numero: 1, vu: false }] },
+    ],
+  },
+];
+*/
 export default function MySeries() {
   const [series, setSeries] = useState<SerieType[]>([]);
   useEffect(() => {
@@ -22,7 +38,7 @@ export default function MySeries() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pb-16">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pb-16 container mx-auto">
       <h1 className="font-bold text-2xl col-span-full text-center  mb-5">
         MySeries
       </h1>

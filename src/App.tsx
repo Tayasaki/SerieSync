@@ -4,6 +4,8 @@ import MySeries from "./components/MySeries";
 import NewSeries from "./components/NewSeries";
 import Footer from "./components/features/layout/Footer";
 import Header from "./components/features/layout/Header";
+import { Toaster } from "./components/ui/sonner";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -13,8 +15,10 @@ function App() {
         <Route path="/" element={<Accueil />} />
         <Route path="/new" element={<NewSeries />} />
         <Route path="/myseries" element={<MySeries />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <Toaster />
     </>
   );
 }

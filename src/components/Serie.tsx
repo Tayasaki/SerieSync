@@ -4,6 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import { ArrowDownNarrowWide, Check, X } from "lucide-react";
 import { type SerieType } from "./MySeries.tsx";
 import { Badge } from "./ui/badge.tsx";
 import { Button } from "./ui/button.tsx";
@@ -15,10 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card.tsx";
-import { ArrowDownNarrowWide, Check, X } from "lucide-react";
 
 const Serie = (props: SerieType) => {
-  const complet = true;
+  const complet = props.saison.every((saison) =>
+    saison.episodes.every((episode) => episode.vu)
+  );
   return (
     <div className="rounded-lg overflow-hidden shadow-2xl">
       <Card>
@@ -41,7 +43,7 @@ const Serie = (props: SerieType) => {
                 <ArrowDownNarrowWide className="ml-2" size={16} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end">
               {props.saison.map((saison) =>
                 saison.episodes.map((episode, index) => (
                   <DropdownMenuItem key={index}>
@@ -54,7 +56,9 @@ const Serie = (props: SerieType) => {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Badge variant={"outline"}>{complet ? "Complet" : "Incomplet"}</Badge>
+          <Badge variant={complet ? "complete" : "incomplete"}>
+            {complet ? "Complet" : "Incomplet"}
+          </Badge>
         </CardFooter>
       </Card>
     </div>
