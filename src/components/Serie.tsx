@@ -1,10 +1,7 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { ArrowDownNarrowWide, Check, X } from "lucide-react";
+import clsx from "clsx";
+import { ArrowDownNarrowWide } from "lucide-react";
+import { useEffect, useState } from "react";
+import EditSerie from "./EditSerie.tsx";
 import { type SerieType } from "./MySeries.tsx";
 import { Badge } from "./ui/badge.tsx";
 import { Button } from "./ui/button.tsx";
@@ -16,49 +13,90 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu.tsx";
+import { Progress } from "./ui/progress.tsx";
 
 const Serie = (props: SerieType) => {
-  const complet = props.saison.every((saison) =>
-    saison.episodes.every((episode) => episode.vu)
-  );
+  const [serie, setSerie] = useState<SerieType>(props);
+  const [complet, setComplet] = useState(false);
+  const [pourcentage, setPourcentage] = useState(0);
+
+  useEffect(() => {
+    setComplet(
+      props.saison.every((saison) =>
+        saison.episodes.every((episode) => episode.vu)
+      )
+    );
+    setPourcentage(
+      Math.round(
+        (props.saison.reduce((acc, saison) => {
+          return (
+            acc +
+            Math.round(
+              (saison.episodes.filter((episode) => episode.vu).length /
+                saison.episodes.length) *
+                100
+            )
+          );
+        }, 0) /
+          props.saison.length) *
+          100
+      ) / 100
+    );
+  }, [serie, props.saison]);
+
   return (
-    <div className="rounded-lg overflow-hidden shadow-2xl">
+    <div className="rounded-lg overflow-hidden">
       <Card>
         <CardHeader>
           <CardTitle className="font-bold text-2xl">{props.titre}</CardTitle>
           <CardDescription className="text-xs">
             ({props.saison.length} saisons)
           </CardDescription>
+          <div className="ml-32 absolute">
+            <EditSerie {...props} />
+          </div>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm italic">
+        <CardContent className="max-h-48 overflow-y-auto">
+          <p className="text-sm italic text-muted-foreground">
             {props.synopsis ? props.synopsis : "Aucun synopsis"}
           </p>
         </CardContent>
         <CardFooter className="py-2 px-4 container justify-between">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"outline"} size={"sm"}>
-                Episodes
-                <ArrowDownNarrowWide className="ml-2" size={16} />
-              </Button>
+          <Progress value={pourcentage} className="mr-2" />
+          <Badge className={clsx({ "bg-green-400 text-green-50": complet })}>
+            {complet ? "Complet" : "Incomplet"}
+          </Badge>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger className="p-2 container">
+              <ArrowDownNarrowWide className="ml-2" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent className="w-10">
               {props.saison.map((saison) =>
                 saison.episodes.map((episode, index) => (
-                  <DropdownMenuItem key={index}>
-                    S{saison.numero}|{episode.numero}
-                    <Button variant={"link"}>
-                      {episode.vu ? <Check size={16} /> : <X />}
-                    </Button>
-                  </DropdownMenuItem>
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => {
+                      const newSerie = { ...serie };
+                      newSerie.saison[saison.numero - 1].episodes[
+                        episode.numero - 1
+                      ].vu = !episode.vu;
+                      setSerie(newSerie);
+                    }}
+                  >
+                    {"S" + saison.numero + "|" + "E" + episode.numero}
+                    {episode.vu ? "✔️" : "❌"}
+                  </Button>
                 ))
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Badge variant={complet ? "complete" : "incomplete"}>
-            {complet ? "Complet" : "Incomplet"}
-          </Badge>
         </CardFooter>
       </Card>
     </div>

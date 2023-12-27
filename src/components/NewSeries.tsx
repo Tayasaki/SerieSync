@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { Delete, DoorOpen, PlusSquare, RotateCcw } from "lucide-react";
+import { Delete, DoorOpen, Plus, PlusSquare, RotateCcw } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -27,11 +27,10 @@ export default function NewSeries() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "episodes",
+    name: "episodes" as never,
   });
 
   const onSubmit = (data: FormDataType) => {
-    console.log(data);
     let series: SerieType[] = [];
     if (localStorage.getItem("series")) {
       series = JSON.parse(localStorage.getItem("series")!) as SerieType[];
@@ -57,7 +56,7 @@ export default function NewSeries() {
     series.push(newSerie);
     localStorage.setItem("series", JSON.stringify(series));
     reset();
-    toast.success(data.titre + " a bien été ajouté" + "🎉");
+    toast.success(data.titre + " a bien été ajouté" + "🎉🎉");
   };
 
   return (
@@ -89,8 +88,8 @@ export default function NewSeries() {
             {...register("synopsis", {
               required: false,
               maxLength: {
-                value: 200,
-                message: "Le synopsis ne doit pas dépasser 200 caractères",
+                value: 400,
+                message: "Le synopsis ne doit pas dépasser 400 caractères",
               },
             })}
           />
@@ -144,11 +143,11 @@ export default function NewSeries() {
             variant="secondary"
             onClick={() => append({ episode: [] })}
           >
-            Ajouter saison <PlusSquare size={16} className="ml-1" />
+            Ajouter une saison <PlusSquare size={16} className="ml-1" />
           </Button>
 
           <Button disabled={isSubmitting} variant="outline" type="submit">
-            Créer <PlusSquare size={16} className="ml-1" />
+            Créer <Plus size={16} className="ml-1" />
           </Button>
         </div>
       </form>

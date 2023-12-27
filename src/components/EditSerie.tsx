@@ -1,23 +1,32 @@
+import clsx from "clsx";
+import { Settings } from "lucide-react";
+import { SerieType } from "./MySeries";
+import { buttonVariants } from "./ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { DialogHeader } from "./ui/dialog";
+} from "./ui/dialog";
 
-export default function EditSerie() {
+export default function EditSerie(props: SerieType) {
   return (
     <Dialog>
-      <DialogTrigger>Open</DialogTrigger>
+      <DialogTrigger
+        className={clsx(
+          buttonVariants({
+            variant: "outline",
+          })
+        )}
+      >
+        <Settings />
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
+          <DialogTitle>Modification de "{props.titre}"</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>
