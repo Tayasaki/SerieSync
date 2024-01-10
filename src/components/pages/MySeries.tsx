@@ -1,7 +1,7 @@
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import Serie from "./Serie.tsx";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert.tsx";
+import Serie from "../features/layout/Serie.tsx";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert.tsx";
 
 export type SerieType = {
   titre: string;
@@ -19,6 +19,7 @@ export default function MySeries() {
   const [series, setSeries] = useState<SerieType[]>([]);
   useEffect(() => {
     setSeries(JSON.parse(localStorage.getItem("series") || "[]"));
+    document.title = "Serie Sync - Mes séries";
   }, []);
 
   return (

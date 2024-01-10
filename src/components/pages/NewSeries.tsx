@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Delete, DoorOpen, Plus, PlusSquare, RotateCcw } from "lucide-react";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,7 +17,6 @@ type FormDataType = {
 
 export default function NewSeries() {
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -24,11 +24,14 @@ export default function NewSeries() {
     control,
     formState: { errors, isSubmitting },
   } = useForm<FormDataType>();
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "episodes" as never,
   });
+
+  useEffect(() => {
+    document.title = "Serie Sync - Créer une série";
+  }, []);
 
   const onSubmit = (data: FormDataType) => {
     let series: SerieType[] = [];
@@ -55,8 +58,24 @@ export default function NewSeries() {
     }
     series.push(newSerie);
     localStorage.setItem("series", JSON.stringify(series));
-    reset();
+    formReset();
     toast.success(data.titre + " a bien été ajouté" + "🎉🎉");
+  };
+
+  const watchListSubmit = (data: FormDataType) => {
+    let watchlist: string[] = [];
+    if (localStorage.getItem("watchlist")) {
+      watchlist = JSON.parse(localStorage.getItem("watchlist")!);
+    }
+    watchlist.push(data.titre);
+    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    formReset();
+    toast.success(data.titre + " a bien été ajouté à la watchlist" + "🎉🎉");
+  };
+
+  const formReset = () => {
+    reset();
+    fields.map((_, index) => remove(index));
   };
 
   return (
@@ -144,6 +163,15 @@ export default function NewSeries() {
             onClick={() => append({ episode: [] })}
           >
             Ajouter une saison <PlusSquare size={16} className="ml-1" />
+          </Button>
+
+          <Button
+            disabled={isSubmitting}
+            variant="ghost"
+            type="reset"
+            onClick={handleSubmit(watchListSubmit)}
+          >
+            Ajouter a la watch list <Plus size={16} className="ml-1" />
           </Button>
 
           <Button disabled={isSubmitting} variant="outline" type="submit">
