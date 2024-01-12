@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 
 const Accueil = () => {
-  const [watchList] = useState<string[]>(
+  const [watchList, setWatchList] = useState<string[]>(
     JSON.parse(localStorage.getItem("watchlist") || "[]")
   );
 
   useEffect(() => {
     document.title = "Série Sync - Accueil";
   }, []);
+
+  const deleteSerie = (serie: string) => {
+    const newWatchList = watchList.filter((s) => s !== serie);
+    localStorage.setItem("watchlist", JSON.stringify(newWatchList));
+    setWatchList(newWatchList);
+  }
 
   return (
     <div className="flex items-center justify-center h-auto mb-24">
@@ -29,7 +35,7 @@ const Accueil = () => {
             </h3>
             <ul>
               {watchList.map((serie, i) => (
-                <li key={i}>{serie}</li>
+                <li key={i} onClick={() => deleteSerie(serie)}>{serie}</li>
               ))}
             </ul>
           </>
