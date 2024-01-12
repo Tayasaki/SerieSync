@@ -51,6 +51,7 @@ export default function EditSerie(props: SerieType) {
     setSerie(series[index]);
     reset();
     toast.success(data.titre + " a bien été modifié" + "🎉🎉");
+    window.location.reload();
   };
 
   return (
