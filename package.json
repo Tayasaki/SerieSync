@@ -1,8 +1,8 @@
 {
-  "name": "seriesync",
+  "name": "serie-sync",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://tayasaki.github.io/SerieSync",
+  "homepage": "https://tayasaki.github.io/serie-sync",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.4",
