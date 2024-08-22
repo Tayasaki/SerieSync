@@ -10,4 +10,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        myseries: resolve(__dirname, 'src/components/pages/MySeries.tsx'),
+        new: resolve(__dirname, 'src/components/pages/NewSeries.tsx'),
+      }
+    }
+  }
 });
