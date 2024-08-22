@@ -2,10 +2,9 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { Delete, DoorOpen, Plus, PlusSquare, RotateCcw } from "lucide-react";
+import { Delete, Plus, PlusSquare, RotateCcw } from "lucide-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { SerieType } from "./MySeries";
 
@@ -16,7 +15,6 @@ type FormDataType = {
 };
 
 export default function NewSeries() {
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -143,27 +141,19 @@ export default function NewSeries() {
           </div>
         ))}
 
-        <div className="flex justify-end gap-4">
-          <Button
-            disabled={isSubmitting}
-            variant="destructive"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Annuler <DoorOpen size={16} className="ml-1" />
-          </Button>
-          <Button disabled={isSubmitting} variant="secondary" type="reset">
-            Réinitialiser <RotateCcw size={16} className="ml-1" />
-          </Button>
-
-          <Button
-            disabled={isSubmitting}
-            variant="secondary"
-            onClick={() => append({ episode: [] })}
-          >
-            Ajouter une saison <PlusSquare size={16} className="ml-1" />
-          </Button>
+        <div className="md:flex-row md:justify-end gap-4 flex flex-col">
+          <div className="flex justify-center gap-4 ">
+            <Button disabled={isSubmitting} variant="destructive" type="reset">
+              Réinitialiser <RotateCcw size={16} className="ml-1" />
+            </Button>
+            <Button
+              disabled={isSubmitting}
+              variant="secondary"
+              onClick={() => append({ episode: [] })}
+            >
+              Ajouter une saison <PlusSquare size={16} className="ml-1" />
+            </Button>
+          </div>
 
           <Button
             disabled={isSubmitting}
